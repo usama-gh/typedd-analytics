@@ -10,6 +10,7 @@
         proxy = document.currentScript.getAttribute('data-proxy');
         token = document.currentScript.getAttribute('data-token');
         domain = document.currentScript.getAttribute('data-domain');
+        project = document.currentScript.getAttribute('data-project');
         DATASOURCE = document.currentScript.getAttribute('data-datasource') || DATASOURCE;
        
         for (const attr of  document.currentScript.attributes) {
@@ -113,6 +114,7 @@
             timestamp: new Date().toISOString(),
             action: name,
             version: '1',
+            project_id: document.currentScript.getAttribute('data-project') || NULL,
             session_id: _getSessionId(),
             payload
         }));
@@ -144,6 +146,7 @@
                 location: country,
                 referrer: document.referrer,
                 pathname: window.location.pathname,
+                project_id: document.currentScript.getAttribute('data-project') || NULL,
                 href: window.location.href
             });
         }, 300);
