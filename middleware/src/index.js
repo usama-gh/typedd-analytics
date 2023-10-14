@@ -4,7 +4,7 @@
     let DATASOURCE = 'analytics_events';
     let globalAttributes = {};
 
-    let proxy, token, host, domain;
+    let proxy, token, host, domain,project;
     if (document.currentScript) {
         host = document.currentScript.getAttribute('data-host');
         proxy = document.currentScript.getAttribute('data-proxy');
@@ -114,7 +114,7 @@
             timestamp: new Date().toISOString(),
             action: name,
             version: '1',
-            project_id: document.currentScript.getAttribute('data-project') || NULL,
+            project_id: project || NULL,
             session_id: _getSessionId(),
             payload
         }));
@@ -146,7 +146,7 @@
                 location: country,
                 referrer: document.referrer,
                 pathname: window.location.pathname,
-                project_id: document.currentScript.getAttribute('data-project') || NULL,
+                project_id: project || NULL,
                 href: window.location.href
             });
         }, 300);
