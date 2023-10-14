@@ -3,7 +3,7 @@ import useSWR from 'swr'
 import { querySQL } from '../api'
 import { DomainData, DomainQueryData } from '../types/domain'
 
-async function getDomain(): Promise<DomainData> {
+async function kgetDomain(): Promise<DomainData> {
   // Guess the instrumented domain, and exclude other domains like development or staging.
   //  - Try to get the domain with most hits from the last hour.
   //  - Fallback to 'some' domain.
