@@ -9,6 +9,7 @@ SQL >
       device,
       browser,
       location,
+      project_id,
       referrer,
       uniqState(session_id) AS visits,
       countState() AS hits

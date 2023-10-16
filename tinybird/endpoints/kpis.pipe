@@ -43,7 +43,6 @@ SQL >
     select 
       toStartOfHour(timestamp) as date,
       session_id,
-        project_id as project_id,
       uniq(session_id) as visits,
       count() as pageviews,
       case when min(timestamp) = max(timestamp) then 1 else 0 end as is_bounce,
@@ -59,7 +58,6 @@ SQL >
     select 
       date,
       session_id,
-      project_id as project_id,
       uniq(session_id) as visits,
       countMerge(hits) as pageviews,
       case when min(first_hit) = max(latest_hit) then 1 else 0 end as is_bounce,
@@ -90,7 +88,6 @@ SQL >
     select 
       date,
       uniq(session_id) as visits,
-      project_id as project_id,
       sum(pageviews) as pageviews,
       sum(case when latest_hit_aux = first_hit_aux then 1 end) / visits as bounce_rate,
       avg(latest_hit_aux - first_hit_aux) as avg_session_sec

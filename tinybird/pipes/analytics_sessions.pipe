@@ -6,6 +6,7 @@ SQL >
     select
       toDate(timestamp) as date,
       session_id,
+      project_id,
       anySimpleState(device) as device,
       anySimpleState(browser) as browser,
       anySimpleState(location) as location,
@@ -16,7 +17,8 @@ SQL >
       analytics_hits
     group by
       date,
-      session_id
+      session_id,
+      project_id
 
 TYPE materialized
 DATASOURCE analytics_sessions_mv
