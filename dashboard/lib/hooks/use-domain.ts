@@ -22,6 +22,7 @@ async function getDomain(): Promise<DomainData> {
   // Best balance between data accuracy and performance I can get.
   const { project_id } = getConfig();
   const { data } = await querySQL<DomainQueryData>(`
+  %
     with (
       SELECT nullif(domainWithoutWWW(href),'') as domain
       FROM analytics_hits
@@ -33,7 +34,7 @@ async function getDomain(): Promise<DomainData> {
     (
       SELECT domainWithoutWWW(href)
       FROM analytics_hits
-      where href not like '%localhost%'
+      where href not like '%localhost%' and project_id = {{String('${project_id}','default')}}
       limit 1
     ) as some_domain
     select coalesce(top_domain, some_domain) as domain format JSON
