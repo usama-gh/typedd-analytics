@@ -1,5 +1,6 @@
 import useSWR from 'swr'
 import { querySQL } from '../api'
+import { useRouter } from 'next/router'
 
 async function getCurrentVisitors(): Promise<number> {
   const { data } = await querySQL<{ visits: number }>(
@@ -11,6 +12,13 @@ async function getCurrentVisitors(): Promise<number> {
 }
 
 export default function useCurrentVisitors() {
+  const router = useRouter()
+
+  // Get the query parameter from the URL
+  const { project_id } = router.query
+
   const { data } = useSWR('currentVisitors', getCurrentVisitors)
+  console.log(data)
+
   return data ?? 0
 }

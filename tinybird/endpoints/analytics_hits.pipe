@@ -8,6 +8,7 @@ DESCRIPTION >
     Parse raw page_hit events
 
 SQL >
+  %
     SELECT
       timestamp,
       action,
@@ -22,7 +23,7 @@ SQL >
       lower(JSONExtractString(payload, 'user-agent')) as user_agent
     FROM
       analytics_events
-    where action = 'page_hit'
+    where action = 'page_hit' and project_id={{ String('project_id','contentdrips') }}
 
 NODE endpoint
 SQL >
