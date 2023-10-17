@@ -2,6 +2,7 @@
 
 SCHEMA >
     `date` Date,
+    `project_id` String,
     `device` String,
     `browser` String,
     `location` String,
@@ -11,4 +12,4 @@ SCHEMA >
 
 ENGINE "AggregatingMergeTree"
 ENGINE_PARTITION_KEY "toYYYYMM(date)"
-ENGINE_SORTING_KEY "date, device, browser, location, pathname"
+ENGINE_SORTING_KEY "date, project_id, device, browser, location, pathname"
