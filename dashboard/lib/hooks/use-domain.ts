@@ -3,11 +3,24 @@ import useSWR from 'swr'
 import { querySQL } from '../api'
 import { DomainData, DomainQueryData } from '../types/domain'
 
+export function getConfig() {
+  const params = new URLSearchParams(window.location.search)
+  const token = params.get('token')
+  const host = params.get('host')
+  const project_id = params.get('project_id')
+  return {
+    token,
+    host,
+    project_id,
+  }
+}
+
 async function getDomain(): Promise<DomainData> {
   // Guess the instrumented domain, and exclude other domains like development or staging.
   //  - Try to get the domain with most hits from the last hour.
   //  - Fallback to 'some' domain.
   // Best balance between data accuracy and performance I can get.
+  const { project_id } = getConfig();
   const { data } = await querySQL<DomainQueryData>(`
     with (
       SELECT nullif(domainWithoutWWW(href),'') as domain
@@ -20,7 +33,7 @@ async function getDomain(): Promise<DomainData> {
     (
       SELECT domainWithoutWWW(href)
       FROM analytics_hits
-      where href not like '%localhost%'
+      where href not like '%localhost%' and project_id = ${project_id}
       limit 1
     ) as some_domain
     select coalesce(top_domain, some_domain) as domain format JSON
