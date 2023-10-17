@@ -16,6 +16,7 @@ SQL >
           action,
           version,
           coalesce(session_id,'0') as session_id,
+          coalesce(project_id,'0') as project_id,
           JSONExtractString(payload, 'locale') as locale,
           JSONExtractString(payload, 'location') as location,
           JSONExtractString(payload, 'referrer') as referrer,
@@ -24,7 +25,12 @@ SQL >
           lower(JSONExtractString(payload, 'user-agent')) as user_agent
         FROM
           analytics_events
-        where action = 'page_hit' and project_id = {{String('project_id','default')}}
+        where action = 'page_hit'
+
+         {% if defined(project_id) %}
+          and project_id = {{String(project_id,'default')}}
+          {% else %}
+           {% end %}
 
 
 
