@@ -24,8 +24,7 @@ export default function CredentialsForm() {
     const { token, hostName } = credentials
     if (!token || (hostType === HostType.Other && !hostName)) return
     const host = hostType === HostType.Other ? hostName : hostType
-    const project_id = 'contentdrips'
-    const params = new URLSearchParams({ token, host, project_id })
+    const params = new URLSearchParams({ token, host })
     router.push({ pathname: router.pathname, search: params.toString() })
   }
 

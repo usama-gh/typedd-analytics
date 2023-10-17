@@ -2,8 +2,22 @@ import { useState } from 'react'
 import useSWR from 'swr'
 import { querySQL } from '../api'
 import { DomainData, DomainQueryData } from '../types/domain'
+import { useRouter } from 'next/router'
+
 
 async function getDomain(): Promise<DomainData> {
+
+  const router = useRouter();
+  const { query } = router;
+
+  // Get the project_id from the query parameters in the URL
+  const { project_id } = query;
+
+  if (!project_id) {
+    // Handle the case when project_id is not available in the URL
+    return 0;
+  }
+
   // Guess the instrumented domain, and exclude other domains like development or staging.
   //  - Try to get the domain with most hits from the last hour.
   //  - Fallback to 'some' domain.
@@ -12,7 +26,7 @@ async function getDomain(): Promise<DomainData> {
     with (
       SELECT nullif(domainWithoutWWW(href),'') as domain
       FROM analytics_hits
-      where timestamp >= now() - interval 1 hour
+      where timestamp >= now() - interval 1 hour AND project_id= ${project_id}
       group by domain
       order by count(1) desc
       limit 1
@@ -20,7 +34,7 @@ async function getDomain(): Promise<DomainData> {
     (
       SELECT domainWithoutWWW(href)
       FROM analytics_hits
-      where href not like '%localhost%'
+      where href not like '%localhost%' AND project_id= ${project_id}
       limit 1
     ) as some_domain
     select coalesce(top_domain, some_domain) as domain format JSON

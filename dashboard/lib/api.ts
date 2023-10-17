@@ -11,9 +11,11 @@ export function getConfig() {
   const params = new URLSearchParams(window.location.search)
   const token = params.get('token')
   const host = params.get('host')
+  const project_id = params.get('project_id')
   return {
     token,
     host,
+    project_id,
   }
 }
 
@@ -49,14 +51,35 @@ export function queryPipe<T>(
   name: string,
   params: Partial<PipeParams<T>> = {}
 ): Promise<QueryPipe<T>> {
-  const searchParams = new URLSearchParams()
-  Object.entries(params).forEach(([key, value]) => {
-    if (!value) return
-    searchParams.set(key, value)
-  })
+  // Retrieve project_id from the URL
+  const { project_id } = getConfig();
 
-  return client(`/pipes/${name}.json?${searchParams}`)
+  // Merge project_id into the params object
+  params = { ...params, project_id };
+
+  const searchParams = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined) {
+      searchParams.set(key, value);
+    }
+  });
+
+  return client(`/pipes/${name}.json?${searchParams}`);
 }
+
+
+// export function queryPipe<T>(
+//   name: string,
+//   params: Partial<PipeParams<T>> = {}
+// ): Promise<QueryPipe<T>> {
+//   const searchParams = new URLSearchParams()
+//   Object.entries(params).forEach(([key, value]) => {
+//     if (!value) return
+//     searchParams.set(key, value)
+//   })
+
+//   return client(`/pipes/${name}.json?${searchParams}`)
+// }
 
 export function querySQL<T>(sql: string): Promise<QuerySQL<T>> {
   return client(`/sql?q=${sql}`)
