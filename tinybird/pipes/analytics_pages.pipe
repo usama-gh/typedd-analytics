@@ -7,6 +7,7 @@ SQL >
       toDate(timestamp) as date,
       device,
       browser,
+      project_id,
       location,
       pathname,
       uniqState(session_id) as visits,
@@ -17,11 +18,12 @@ SQL >
       date,
       device,
       browser,
+      project_id,
       location,
       pathname
 
 TYPE materialized
 DATASOURCE analytics_pages_mv
 ENGINE "AggregatingMergeTree"
-ENGINE_SORTING_KEY "date, device, browser, location, pathname"
+ENGINE_SORTING_KEY "date, project_id, device, browser, location, pathname"
 ENGINE_PARTITION_KEY "toYYYYMM(date)"

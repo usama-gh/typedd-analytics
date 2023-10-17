@@ -30,6 +30,10 @@ SQL >
           {% else %}
             and date <= today()
           {% end %}
+           {% if defined(project_id) %}
+             and
+           project_id = {{String(project_id,'default')}}
+           {% end %}
         group by
           device
         order by

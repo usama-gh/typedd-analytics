@@ -46,6 +46,7 @@ SQL >
         select 
           toStartOfHour(timestamp) as date,
           session_id,
+          project_id,
           uniq(session_id) as visits,
           count() as pageviews,
           case when min(timestamp) = max(timestamp) then 1 else 0 end as is_bounce,
@@ -53,14 +54,20 @@ SQL >
           min(timestamp) as first_hit_aux
         from
           analytics_hits
+     
+          {% if defined(project_id) %}
+             where
+           project_id = {{String(project_id,'default')}}
+           {% end %}
         where
           toDate(timestamp) = {{Date(date_from)}}
         group by
-          toStartOfHour(timestamp), session_id
+          toStartOfHour(timestamp), session_id, project_id
         {% else %}
         select 
           date,
           session_id,
+          project_id,
           uniq(session_id) as visits,
           countMerge(hits) as pageviews,
           case when min(first_hit) = max(latest_hit) then 1 else 0 end as is_bounce,
@@ -80,7 +87,7 @@ SQL >
             and date <= today()
           {% end %}
         group by
-          date, session_id
+          date, session_id, project_id
         {% end %}
 
 
@@ -90,17 +97,23 @@ DESCRIPTION >
     General KPIs per date, works for both summary metrics and trends charts.
 
 SQL >
-
+%
     select 
       date,
+      project_id,
       uniq(session_id) as visits,
       sum(pageviews) as pageviews,
       sum(case when latest_hit_aux = first_hit_aux then 1 end) / visits as bounce_rate,
       avg(latest_hit_aux - first_hit_aux) as avg_session_sec
     from 
      hits
+     
+     {% if defined(project_id) %}
+             where
+           project_id = {{String(project_id,'default')}}
+           {% end %}
     group by
-      date
+      date,project_id
 
 
 

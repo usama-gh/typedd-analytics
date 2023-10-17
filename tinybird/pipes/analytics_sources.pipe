@@ -9,6 +9,7 @@ SQL >
       device,
       browser,
       location,
+      project_id,
       referrer,
       uniqState(session_id) AS visits,
       countState() AS hits
@@ -21,10 +22,11 @@ SQL >
       device,
       browser,
       location,
-      referrer
+      referrer,
+      project_id
 
 TYPE materialized
 DATASOURCE analytics_sources_mv
 ENGINE "AggregatingMergeTree"
-ENGINE_SORTING_KEY "date, device, browser, location, referrer"
+ENGINE_SORTING_KEY "date, device, browser, location, referrer, project_id"
 ENGINE_PARTITION_KEY "toYYYYMM(date)"
