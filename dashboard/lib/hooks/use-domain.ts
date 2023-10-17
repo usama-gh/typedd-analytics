@@ -33,7 +33,7 @@ async function getDomain(): Promise<DomainData> {
     (
       SELECT domainWithoutWWW(href)
       FROM analytics_hits
-      where href not like '%localhost%' and project_id = ${project_id}
+      where href not like '%localhost%'
       limit 1
     ) as some_domain
     select coalesce(top_domain, some_domain) as domain format JSON
