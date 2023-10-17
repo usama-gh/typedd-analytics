@@ -24,7 +24,7 @@ SQL >
           lower(JSONExtractString(payload, 'user-agent')) as user_agent
         FROM
           analytics_events
-        where action = 'page_hit'
+        where action = 'page_hit' and project_id = {{String('project_id','default')}}
 
 
 
