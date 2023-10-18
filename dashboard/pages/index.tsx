@@ -26,7 +26,7 @@ export default function DashboardPage() {
           <div className="space-y-6 sm:space-y-10">
             {isAuthenticated && isTokenValid && (
               <>
-                <img src="/icon.png" alt="" width={24} height={24} />
+                {/* <img src="/icon.png" alt="" width={24} height={24} /> */}
                 <Header />
               </>
             )}
@@ -36,11 +36,11 @@ export default function DashboardPage() {
               {!isAuthenticated && <Credentials />}
             </main>
           </div>
-          {isAuthenticated && (
+          {/* {isAuthenticated && (
             <div className="mt-20">
               <Footer />
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </>
