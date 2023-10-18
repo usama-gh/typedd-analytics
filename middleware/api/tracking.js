@@ -33,7 +33,7 @@ const _postEvent = async (event) => {
 };
 
 export default async (req) => {
-  // await _postEvent(req.body);
+  await _postEvent(req.body);
   return new Response("ok", {
     headers: {
       "access-control-allow-credentials": true,
