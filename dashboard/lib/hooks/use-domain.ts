@@ -26,7 +26,7 @@ async function getDomain(): Promise<DomainData> {
     with (
       SELECT nullif(domainWithoutWWW(href),'') as domain
       FROM analytics_hits
-      where timestamp >= now() - interval 1 hour
+      where timestamp >= now() - interval 1 hour and project_id = {{String('${project_id}','null')}}
       group by domain
       order by count(1) desc
       limit 1
@@ -34,7 +34,7 @@ async function getDomain(): Promise<DomainData> {
     (
       SELECT domainWithoutWWW(href)
       FROM analytics_hits
-      where href not like '%localhost%' and project_id = {{String('${project_id}','default')}}
+      where href not like '%localhost%' and project_id = {{String('${project_id}','null')}}
       limit 1
     ) as some_domain
     select coalesce(top_domain, some_domain) as domain format JSON

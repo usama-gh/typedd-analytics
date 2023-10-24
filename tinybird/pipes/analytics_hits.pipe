@@ -15,7 +15,7 @@ SQL >
           timestamp,
           action,
           version,
-          coalesce(project_id,'0') as project_id,
+          coalesce(project_id,'default') as project_id,
           coalesce(session_id,'0') as session_id,
           JSONExtractString(payload, 'locale') as locale,
           JSONExtractString(payload, 'location') as location,
@@ -35,7 +35,7 @@ SQL >
 
 NODE endpoint
 SQL >
-
+  %
     SELECT
       timestamp,
       action,
@@ -62,5 +62,8 @@ SQL >
       END as browser
     FROM
       parsed_hits
+        {% if defined(project_id) %}
+          where project_id = {{String(project_id,'default')}}
+           {% end %}
 
 
